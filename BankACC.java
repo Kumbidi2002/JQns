@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 // BankACC class to represent individual bank accounts
-class BankACC {
+class BankACC{
     private String accountNumber;
     private String accountHolderName;
     private double balance;
@@ -38,24 +36,30 @@ class BankACC {
 // Bank class to represent the bank
 class Bank {
     private String name;
-    private List<BankACC> accounts;
+    private BankACC[] accounts;
+    private int accountCount;
 
     // Constructor
-    public Bank(String name) {
+    public Bank(String name, int maxAccounts) {
         this.name = name;
-        this.accounts = new ArrayList<>();
+        this.accounts = new BankACC[maxAccounts];
+        this.accountCount = 0;
     }
 
     // Method to add a new bank account
     public void addAccount(BankACC account) {
-        accounts.add(account);
+        if (accountCount < accounts.length) {
+            accounts[accountCount++] = account;
+        } else {
+            System.out.println("Cannot add more accounts. Bank is full.");
+        }
     }
 
     // Method to find an account by account number
     public BankACC findAccountByNumber(String accountNumber) {
-        for (BankACC account : accounts) {
-            if (account.getAccountNumber().equals(accountNumber)) {
-                return account;
+        for (int i = 0; i < accountCount; i++) {
+            if (accounts[i].getAccountNumber().equals(accountNumber)) {
+                return accounts[i];
             }
         }
         return null;
@@ -63,11 +67,11 @@ class Bank {
 
     // Method to display all accounts in the bank
     public void displayAllAccounts() {
-        if (accounts.isEmpty()) {
+        if (accountCount == 0) {
             System.out.println("No accounts in the bank.");
         } else {
-            for (BankACC account : accounts) {
-                System.out.println(account);
+            for (int i = 0; i < accountCount; i++) {
+                System.out.println(accounts[i]);
             }
         }
     }
@@ -75,7 +79,7 @@ class Bank {
     // Main method to test the Bank class
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Bank bank = new Bank("Global Bank");
+        Bank bank = new Bank("Global Bank", 100);  // Adjust the maxAccounts as needed
 
         while (true) {
             System.out.println("Bank Menu:");
